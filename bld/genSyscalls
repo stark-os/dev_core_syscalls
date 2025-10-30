@@ -30,7 +30,7 @@ CFG_DIR = pCXD + "/cfg"
 #destinations
 DST_DIR = pCXD + "/out/src"
 DST_ASM = DST_DIR + "/syscalls.asm"
-DST_FP  = DST_DIR + "/syscalls.sdl.cfg.TEMPORARILY_DISABLED"
+DST_FP  = DST_DIR + "/syscalls.asm.cfg"
 
 #generation aesthetics : more can be added, but not removed! (depends on syscall name lengths)
 MAX_TABS_SEPARATION = 7
