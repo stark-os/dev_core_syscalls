@@ -1,6 +1,6 @@
 t0c Syscall management library
 
-l N library for managing syscalls.
+l ASM library for managing syscalls.
 
 b
 b
@@ -17,7 +17,7 @@ p Of course, as it is the main goal of this library, it is completely \
 independant from any C or N resources.
 
 p Also, this main goal of this repository is to provide sources for \
-building Stark OS \lcore\lhttps://github.com/stark-os/dev/core/core\l. \
+building Stark OS \lhttps://github.com/stark-os/dev/core/core\lcore\l. \
 It is not meant to be used alone.
 
 
@@ -27,12 +27,18 @@ t1 Compatibility
 
 t2 Target
 
-l Stark OS \lcore\lhttps://github.com/stark-os/dev/core/core\l.
+l Stark OS \lhttps://github.com/stark-os/dev/core/core\lcore\l.
 
 
 t2 Build requirements
 
-l Nothing to build.
+l Here is all the requirement to \bbuild\b this library:
+- Linux based OS
+-
+- git CLI
+-
+- Python (for the moment)
+-
 
 
 
@@ -46,7 +52,7 @@ l Nothing to install.
 
 t2 Usage
 
-l See Stark OS \lcore\lhttps://github.com/stark-os/dev/core/core\l.
+l See Stark OS \lhttps://github.com/stark-os/dev/core/core\lcore\l.
 
 
 t2 Uninstall
@@ -58,7 +64,21 @@ l Nothing to uninstall.
 
 t1 Build process
 
-l Nothing to build.
+l To build the library yourself, simply run:
+" bash
+bld/build <arch>
+"
+l Parameter \march\m must be one of the following:
+- arm
+-
+- arm64
+-
+- x86
+-
+- x86_64
+-
+
+l Build produces sources in \mout/src\m.
 
 
 
