@@ -1,0 +1,122 @@
+#!/usr/bin/python3
+
+
+
+# ---------------- IMPORTATIONS ----------------
+
+#system
+import os, sys
+
+#config syntax
+import config
+
+
+
+
+
+
+# ---------------- DECLARATIONS ----------------
+
+#current executable directory
+CXD  = os.path.realpath(os.path.dirname(sys.argv[0]))
+pCXD = os.path.dirname(CXD)
+
+#default targetted architecture
+ARCH = "x86_64"
+
+#configuration directory
+CFG_DIR = pCXD + "/cfg"
+
+#destinations
+DST_DIR = pCXD + "/out/src"
+DST_FP  = DST_DIR + "/syscall.inv.cfg.generated"
+
+#generation aesthetics : more can be added, but not removed! (depends on syscall name lengths)
+MAX_TABS_SEPARATION = 7
+
+
+
+
+
+
+# ---------------- TOOLS ----------------
+
+#error
+def error(msg, err=1):
+	print("genSyscalls: " + msg)
+	exit(err)
+
+
+
+
+
+
+# ---------------- INITIALIZATION ----------------
+
+#argument given => use it
+if len(sys.argv) > 1:
+	ARCH = sys.argv[1]
+
+#read ASM argument attribution
+asm_args_cfg = CFG_DIR + "/asm_args/" + ARCH + ".cfg"
+asm_args     = config.read(asm_args_cfg)
+
+#read syscalls table
+syscalls_cfg = CFG_DIR + "/syscalls/" + ARCH + ".cfg"
+syscalls     = config.read(syscalls_cfg)
+
+
+
+
+
+
+# ---------------- EXECUTION ----------------
+
+#dst dir
+if not os.path.isdir(os.path.abspath(DST_DIR)):
+	os.makedirs(DST_DIR)
+
+#GENERIC : generate main "syscalls.S"
+fpTxt  = "\n#generic syscall\n"
+fpTxt += "ulng MLLI_MSyscall_Fsyscall(ulng a, ulng b, ulng c, ulng d, ulng e, ulng f);\n"
+f = open(DST_DIR + "/MLLI_MSyscall_Fsyscall.s", 'w')
+f.write(
+	".intel_syntax noprefix\n\n"                                 + \
+	"/* syscalls for Linux " + ARCH + " [generated file] */\n\n" + \
+	".global MLLI_MSyscall_Fsyscall\n"                           + \
+	"MLLI_MSyscall_Fsyscall:\n"                                  + \
+	"\tmov r10, rcx\n"                                           + \
+	"\tsyscall\n"                                                + \
+	"\tret\n\n"
+)
+f.close()
+
+#SPECIFIC : for each specific syscall
+fpTxt += "\n#specific syscall\n"
+for s in syscalls.keys():
+	syscall_data = syscalls[s].split(':')
+	if len(syscall_data) < 2:
+		error("Invalid configuration \"" + syscalls[s] + "\" for syscall \"" + s + "\" in \"" + syscalls_cfg + "\" (must be formatted as \"ID:ret,param1,param2...\").")
+
+	#parse config
+	id     = syscall_data[0]
+	params = syscall_data[1]
+
+	#add trace to ASM
+	fpTxt += "ulng MLLI_MSyscall_F" + s + "(ulng a, ulng b, ulng c, ulng d, ulng e, ulng f);\n"
+
+	#write syscall ASM
+	f = open(DST_DIR + "/MLLI_MSyscall_F" + s + ".s", 'w')
+	f.write(
+		".global MLLI_MSyscall_F" + s + "\n"  + \
+		"MLLI_MSyscall_F" + s + ":\n"    + \
+		"\tmov\trax, " + id + "\n"       + \
+		"\tjmp MLLI_MSyscall_Fsyscall\n" + \
+		"\tret\n\n"
+	)
+	f.close()
+
+#write down
+f = open(DST_FP, "w")
+f.write(fpTxt)
+f.close()
