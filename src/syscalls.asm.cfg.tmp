@@ -1,12 +1,12 @@
 //syscalls
 extern void* syscall_mmap(
-	void* adr,
-	ulng  len,
-	ulng  prot,
-	ulng  flags,
-	ulng  fd,
-	ulng  ofs
+	void*  adr,
+	GUumax len,
+	GUumax prot,
+	GUumax flags,
+	GUumax fd,
+	GUumax ofs
 );
-extern int  syscall_munmap(void* adr, ulng len);
+extern int  syscall_munmap(void* adr, GUumax len);
 extern void syscall_write(uint fd, char* c, uint len);
-extern void syscall_exit(ulng err);
+extern void syscall_exit(GUumax err);
