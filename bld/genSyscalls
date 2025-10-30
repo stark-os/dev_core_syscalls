@@ -29,7 +29,8 @@ CFG_DIR = pCXD + "/cfg"
 
 #destinations
 DST_DIR = pCXD + "/out/src"
-DST_FP  = DST_DIR + "/syscall.inv.cfg.generated"
+DST_ASM = DST_DIR + "/syscalls.asm"
+DST_FP  = DST_DIR + "/syscalls.sdl.cfg.TEMPORARILY_DISABLED"
 
 #generation aesthetics : more can be added, but not removed! (depends on syscall name lengths)
 MAX_TABS_SEPARATION = 7
@@ -79,8 +80,7 @@ if not os.path.isdir(os.path.abspath(DST_DIR)):
 #GENERIC : generate main "syscalls.S"
 fpTxt  = "\n#generic syscall\n"
 fpTxt += "ulng MLLI_MSyscall_Fsyscall(ulng a, ulng b, ulng c, ulng d, ulng e, ulng f);\n"
-f = open(DST_DIR + "/MLLI_MSyscall_Fsyscall.s", 'w')
-f.write(
+asmTxt = \
 	".intel_syntax noprefix\n\n"                                 + \
 	"/* syscalls for Linux " + ARCH + " [generated file] */\n\n" + \
 	".global MLLI_MSyscall_Fsyscall\n"                           + \
@@ -88,8 +88,6 @@ f.write(
 	"\tmov r10, rcx\n"                                           + \
 	"\tsyscall\n"                                                + \
 	"\tret\n\n"
-)
-f.close()
 
 #SPECIFIC : for each specific syscall
 fpTxt += "\n#specific syscall\n"
@@ -106,17 +104,19 @@ for s in syscalls.keys():
 	fpTxt += "ulng MLLI_MSyscall_F" + s + "(ulng a, ulng b, ulng c, ulng d, ulng e, ulng f);\n"
 
 	#write syscall ASM
-	f = open(DST_DIR + "/MLLI_MSyscall_F" + s + ".s", 'w')
-	f.write(
-		".global MLLI_MSyscall_F" + s + "\n"  + \
-		"MLLI_MSyscall_F" + s + ":\n"    + \
-		"\tmov\trax, " + id + "\n"       + \
-		"\tjmp MLLI_MSyscall_Fsyscall\n" + \
+	asmTxt += \
+		".global MLLI_MSyscall_F" + s + "\n" + \
+		"MLLI_MSyscall_F" + s + ":\n"        + \
+		"\tmov\trax, " + id + "\n"           + \
+		"\tjmp MLLI_MSyscall_Fsyscall\n"     + \
 		"\tret\n\n"
-	)
-	f.close()
 
-#write down
+#write down ASM
+f = open(DST_ASM, "w")
+f.write(asmTxt)
+f.close()
+
+#write down FP
 f = open(DST_FP, "w")
 f.write(fpTxt)
 f.close()
