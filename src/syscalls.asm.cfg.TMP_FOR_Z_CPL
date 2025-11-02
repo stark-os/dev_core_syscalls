@@ -1,0 +1,4 @@
+fMSyscall_Fmmap		GUumax,GUumax,GUumax,GUumax,GUumax,GUumax,GUumax
+fMSyscall_Fmunmap	GUu32,GUumax,GUumax
+fMSyscall_Fwrite	void,GUu32,GUumax,GUu32
+fMSyscall_Fexit		void,GUumax
