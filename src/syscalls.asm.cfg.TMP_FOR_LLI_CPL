@@ -1,11 +1,11 @@
 extern ref MSyscall_Fmmap(
 	ref    adr,
-	GUumax len,
-	GUumax prot,
-	GUumax flags,
-	GUumax fd,
-	GUumax ofs
+	GUsmax len,
+	GUsmax prot,
+	GUsmax flags,
+	GUsmax fd,
+	GUsmax ofs
 );
-extern int  MSyscall_Fmunmap(ref adr, GUumax len);
-extern void MSyscall_Fwrite(uint fd, char* c, uint len);
-extern void MSyscall_Fexit(GUumax err);
+extern int  MSyscall_Fmunmap(ref adr, GUsmax len);
+extern void MSyscall_Fwrite(s32 fd, char* c, s32 len);
+extern void MSyscall_Fexit(GUsmax err);
