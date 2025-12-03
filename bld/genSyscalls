@@ -98,10 +98,10 @@ for s in syscalls.keys():
 
 	#parse config
 	id     = syscall_data[0]
-	params = syscall_data[1]
+	params = syscall_data[1].split(',')
 
 	#add trace to ASM
-	fpTxt += "rfMSyscall_F" + s + "\tsmax,smax,smax,smax,smax,smax,smax\n"
+	fpTxt += "rfMSyscall_F" + s + '\t' + ','.join(len(params) * ["smax"]) + '\n'
 
 	#write syscall ASM
 	asmTxt += \
