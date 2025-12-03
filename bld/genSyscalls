@@ -79,7 +79,7 @@ if not os.path.isdir(os.path.abspath(DST_DIR)):
 
 #GENERIC : generate main "syscalls.S"
 fpTxt  = "#generic syscall\n"
-fpTxt += "rfMSyscall_Fsyscall\tsmax,smax,smax,smax,smax,smax,smax\n"
+fpTxt += "rfMSyscall_Fsyscall\tGUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax\n"
 asmTxt = \
 	".intel_syntax noprefix\n\n"                                 + \
 	"/* syscalls for Linux " + ARCH + " [generated file] */\n\n" + \
@@ -101,7 +101,7 @@ for s in syscalls.keys():
 	params = syscall_data[1].split(',')
 
 	#add trace to ASM
-	fpTxt += "rfMSyscall_F" + s + '\t' + ','.join(len(params) * ["smax"]) + '\n'
+	fpTxt += "rfMSyscall_F" + s + '\t' + ','.join(len(params) * ["GUsmax"]) + '\n'
 
 	#write syscall ASM
 	asmTxt += \
