@@ -79,12 +79,12 @@ if not os.path.isdir(os.path.abspath(DST_DIR)):
 
 #GENERIC : generate main "syscalls.S"
 fpTxt  = "#generic syscall\n"
-fpTxt += "rfMLLI_MSyscall_Fsyscall\tsmax,smax,smax,smax,smax,smax,smax\n"
+fpTxt += "rfMSyscall_Fsyscall\tsmax,smax,smax,smax,smax,smax,smax\n"
 asmTxt = \
 	".intel_syntax noprefix\n\n"                                 + \
 	"/* syscalls for Linux " + ARCH + " [generated file] */\n\n" + \
-	".global MLLI_MSyscall_Fsyscall\n"                           + \
-	"MLLI_MSyscall_Fsyscall:\n"                                  + \
+	".global MSyscall_Fsyscall\n"                                + \
+	"MSyscall_Fsyscall:\n"                                       + \
 	"\tmov r10, rcx\n"                                           + \
 	"\tsyscall\n"                                                + \
 	"\tret\n\n"
@@ -101,14 +101,14 @@ for s in syscalls.keys():
 	params = syscall_data[1]
 
 	#add trace to ASM
-	fpTxt += "rfMLLI_MSyscall_F" + s + "\tsmax,smax,smax,smax,smax,smax,smax\n"
+	fpTxt += "rfMSyscall_F" + s + "\tsmax,smax,smax,smax,smax,smax,smax\n"
 
 	#write syscall ASM
 	asmTxt += \
-		".global MLLI_MSyscall_F" + s + "\n" + \
-		"MLLI_MSyscall_F" + s + ":\n"        + \
+		".global MSyscall_F" + s + "\n" + \
+		"MSyscall_F" + s + ":\n"        + \
 		"\tmov\trax, " + id + "\n"           + \
-		"\tjmp MLLI_MSyscall_Fsyscall\n"     + \
+		"\tjmp MSyscall_Fsyscall\n"     + \
 		"\tret\n\n"
 
 #write down ASM
