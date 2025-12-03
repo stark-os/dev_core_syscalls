@@ -17,22 +17,22 @@ import config
 
 # ---------------- DECLARATIONS ----------------
 
-#current executable directory
+#cur exe dir
 CXD  = os.path.realpath(os.path.dirname(sys.argv[0]))
 pCXD = os.path.dirname(CXD)
 
-#default targetted architecture
+#default tgt arch
 ARCH = "x86_64"
 
-#configuration directory
+#cfg dir
 CFG_DIR = pCXD + "/cfg"
 
-#destinations
+#dst
 DST_DIR = pCXD + "/out/src"
 DST_ASM = DST_DIR + "/syscalls.asm"
 DST_FP  = DST_DIR + "/syscalls.asm.cfg"
 
-#generation aesthetics : more can be added, but not removed! (depends on syscall name lengths)
+#gen aesthetics: more can be added, but not rm! (depends on syscall name lengths)
 MAX_TABS_SEPARATION = 7
 
 
@@ -78,8 +78,8 @@ if not os.path.isdir(os.path.abspath(DST_DIR)):
 	os.makedirs(DST_DIR)
 
 #GENERIC : generate main "syscalls.S"
-fpTxt  = "\n#generic syscall\n"
-fpTxt += "GUumax MLLI_MSyscall_Fsyscall(GUumax a, GUumax b, GUumax c, GUumax d, GUumax e, GUumax f);\n"
+fpTxt  = "#generic syscall\n"
+fpTxt += "rfMLLI_MSyscall_Fsyscall\tGUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax\n"
 asmTxt = \
 	".intel_syntax noprefix\n\n"                                 + \
 	"/* syscalls for Linux " + ARCH + " [generated file] */\n\n" + \
@@ -101,7 +101,7 @@ for s in syscalls.keys():
 	params = syscall_data[1]
 
 	#add trace to ASM
-	fpTxt += "GUumax MLLI_MSyscall_F" + s + "(GUumax a, GUumax b, GUumax c, GUumax d, GUumax e, GUumax f);\n"
+	fpTxt += "rfMLLI_MSyscall_F" + s + "\tGUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax,GUsmax\n"
 
 	#write syscall ASM
 	asmTxt += \
